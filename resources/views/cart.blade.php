@@ -3,56 +3,79 @@
 @section('content')
 
     <div class="container">
-        <p><a href="#">Home</a> / Cart</p>
+        <p><a href="{{ url('shop') }}">Home</a> / Cart</p>
         <h1>Your Cart</h1>
 
         <hr>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th class="table-image"></th>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th class="column-spacer"></th>
-                    <th></th>
-                </tr>
-            </thead>
+        @if (session()->has('success_message'))
+            <div class="alert alert-success">
+                {{ session()->get('success_message') }}
+            </div>
+        @endif
 
-            <tbody>
-                <tr>
-                    <td class="table-image"><a href="/product"><img src="{{ asset('img/ps4.jpg') }}" alt="product" class="img-responsive cart-image"></a></td>
-                    <td><a href="/product" class="">Playstation 4</a></td>
-                    <td>1</td>
-                    <td>$299.99</td>
-                    <td class=""></td>
-                    <td><a href="#">Remove</a></td>
-                </tr>
+        @if (sizeof($cartContents) > 0)
 
-                <tr>
-                    <td class="table-image"><a href="/product"><img src="{{ asset('img/xbox-one.jpg') }}" alt="product" class="img-responsive cart-image"></a></td>
-                    <td><a href="/product" class="">Xbox One</a></td>
-                    <td>1</td>
-                    <td>$399.99</td>
-                    <td class=""></td>
-                    <td><a href="#">Remove</a></td>
-                </tr>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="table-image"></th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th class="column-spacer"></th>
+                        <th></th>
+                    </tr>
+                </thead>
 
-                <tr class="border-bottom">
-                    <td class="table-image"></td>
-                    <td style="padding: 40px;"></td>
-                    <td class="small-caps table-bg" style="text-align: right">Your Total</td>
-                    <td class="table-bg">$2,015</td>
-                    <td class="column-spacer"></td>
-                    <td></td>
-                </tr>
+                <tbody>
+                    @foreach ($cartContents as $item)
+                    <tr>
+                        <td class="table-image"><a href="{{ url('shop', [$item->product->slug]) }}"><img src="{{ asset('img/' . $item->product->image) }}" alt="product" class="img-responsive cart-image"></a></td>
+                        <td><a href="{{ url('shop', [$item->product->slug]) }}">{{ $item->name }}</a></td>
+                        <td>{{ $item->qty }}</td>
+                        <td>${{ $item->price }}</td>
+                        <td class=""></td>
+                        <td><!-- <a href="#">Remove old</a> -->
+                            <form action="{{ url('cart', [$item->rowid]) }}" method="POST">
+                                {!! csrf_field() !!}
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="submit" class="btn btn-danger btn-sm" value="Remove">
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
 
-            </tbody>
-        </table>
+                    <tr class="border-bottom">
+                        <td class="table-image"></td>
+                        <td style="padding: 40px;"></td>
+                        <td class="small-caps table-bg" style="text-align: right">Your Total</td>
+                        <td class="table-bg">${{ $cartTotal }}</td>
+                        <td class="column-spacer"></td>
+                        <td></td>
+                    </tr>
 
-        <a href="/" class="btn btn-primary btn-lg">Continue Shopping</a> &nbsp;
-        <a href="#" class="btn btn-success btn-lg">Proceed to Checkout</a>
+                </tbody>
+            </table>
+
+
+            <a href="/shop" class="btn btn-primary btn-lg">Continue Shopping</a> &nbsp;
+            <a href="#" class="btn btn-success btn-lg">Proceed to Checkout</a>
+
+            <div style="float:right">
+                <form action="/emptyCart" method="POST">
+                    {!! csrf_field() !!}
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="submit" class="btn btn-danger btn-lg" value="Empty Cart">
+                </form>
+            </div>
+
+        @else
+
+            <h3>You have no items in your shopping cart</h3>
+            <a href="/shop" class="btn btn-primary btn-lg">Continue Shopping</a>
+
+        @endif
 
         <div class="spacer"></div>
 

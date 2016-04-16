@@ -16,7 +16,9 @@ class CartController extends Controller
      */
     public function index()
     {
-        return view('cart');
+        $cartContents = Cart::content();
+        $cartTotal = Cart::total();
+        return view('cart')->with(['cartContents' => $cartContents, 'cartTotal' => $cartTotal]);
     }
 
     /**
@@ -37,7 +39,8 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-
+        Cart::associate('Product','App')->add($request->id, $request->name, 1, $request->price);
+        return redirect('cart')->withSuccessMessage('Item was added to your cart!');
     }
 
     /**
@@ -82,6 +85,18 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Cart::remove($id);
+        return redirect('cart')->withSuccessMessage('Item has been removed!');
+    }
+
+    /**
+     * Remove the resource from storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyAll()
+    {
+        Cart::destroy();
+        return redirect('cart')->withSuccessMessage('Your cart his been cleared!');
     }
 }

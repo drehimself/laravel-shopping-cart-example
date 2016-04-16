@@ -59,7 +59,7 @@
 
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="/cart">Cart (0)</a></li>
+                <li><a href="/cart">Cart ({{ $cartCount }})</a></li>
               </ul>
             </div><!--/.nav-collapse -->
           </div>

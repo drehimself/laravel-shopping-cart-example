@@ -23,7 +23,7 @@ class ProductsTableSeeder extends Seeder
             'name' => 'Xbox One',
             'slug' => 'xbox-one',
             'description' => 'description goes here',
-            'price' => 399.99,
+            'price' => 449.99,
             'image' => 'xbox-one.jpg',
         ]);
 
