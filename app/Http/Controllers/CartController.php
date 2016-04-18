@@ -16,19 +16,7 @@ class CartController extends Controller
      */
     public function index()
     {
-        $cartContents = Cart::content();
-        $cartTotal = Cart::total();
-        return view('cart')->with(['cartContents' => $cartContents, 'cartTotal' => $cartTotal]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return view('cart');
     }
 
     /**
@@ -41,28 +29,6 @@ class CartController extends Controller
     {
         Cart::associate('Product','App')->add($request->id, $request->name, 1, $request->price);
         return redirect('cart')->withSuccessMessage('Item was added to your cart!');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**

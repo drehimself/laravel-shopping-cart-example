@@ -11,12 +11,6 @@ use \Cart as Cart;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
-    public function __construct()
-    {
-        // share the number of items in the cart with all views
-        view()->share('cartCount', Cart::count());
-    }
 }
 
 
