@@ -11,6 +11,6 @@ Route::get('/', function () {
 Route::resource('shop', 'ProductController', ['only' => ['index', 'show']]);
 
 Route::resource('cart', 'CartController');
-Route::delete('emptyCart', 'CartController@destroyAll');
+Route::delete('emptyCart', 'CartController@emptyCart');
 
 

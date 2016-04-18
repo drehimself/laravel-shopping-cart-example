@@ -60,7 +60,7 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroyAll()
+    public function emptyCart()
     {
         Cart::destroy();
         return redirect('cart')->withSuccessMessage('Your cart his been cleared!');
