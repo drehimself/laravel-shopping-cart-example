@@ -26,7 +26,7 @@ class CartTest extends TestCase
     public function it_loads_the_product_page()
     {
         $this->visit('/shop')
-             ->click('#playstation-4')
+             ->click('Playstation 4')
              ->seePageIs('/shop/playstation-4');
     }
 

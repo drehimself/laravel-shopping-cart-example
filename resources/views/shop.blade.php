@@ -18,8 +18,8 @@
                     <div class="col-md-3">
                         <div class="thumbnail">
                             <div class="caption text-center">
-                                <a href="{{ url('shop', [$product->slug]) }}" id="{{ $product->slug }}"><img src="{{ asset('img/' . $product->image) }}" alt="product" class="img-responsive"></a>
-                                <a href="/shop/product-name"><h3>{{ $product->name }}</h3>
+                                <a href="{{ url('shop', [$product->slug]) }}"><img src="{{ asset('img/' . $product->image) }}" alt="product" class="img-responsive"></a>
+                                <a href="{{ url('shop', [$product->slug]) }}"><h3>{{ $product->name }}</h3>
                                 <p>{{ $product->price }}</p>
                                 </a>
                             </div> <!-- end caption -->
