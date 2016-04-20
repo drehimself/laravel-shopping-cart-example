@@ -3,9 +3,11 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use \Cart as Cart;
 
 class CartTest extends TestCase
 {
+
     /** @test */
     public function it_redirects_home_page_to_shop_page()
     {
@@ -74,6 +76,28 @@ class CartTest extends TestCase
              ->press('Empty Cart')
              ->see('Your cart his been cleared')
              ->see('Cart (0)');
+    }
+
+    /** @test */
+    public function it_updates_the_quantity_of_a_product()
+    {
+        Cart::associate('Product','App')->add(1, 'Playstation 4', 1, 399.99);
+
+        $this->json('PATCH', '/cart/' . Cart::content()->first()->rowid, ['quantity' => 4])
+             ->seeStatusCode(200)
+             ->seeJson(['success' => true])
+             ->assertEquals(4, Cart::content()->first()->qty);
+    }
+
+    /** @test */
+    public function it_does_not_update_the_quantity_of_a_product_if_not_between_1_and_5()
+    {
+        Cart::associate('Product','App')->add(1, 'Playstation 4', 1, 399.99);
+
+        $this->json('PATCH', '/cart/' . Cart::content()->first()->rowid, ['quantity' => 6])
+             ->seeStatusCode(200)
+             ->seeJson(['success' => false])
+             ->assertEquals(1, Cart::content()->first()->qty);
     }
 
 

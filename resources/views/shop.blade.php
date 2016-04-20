@@ -5,7 +5,7 @@
     <div class="container">
         <div class="jumbotron text-center clearfix">
             <h2>Laravel Shopping Cart Example</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corrupti autem doloribus provident repudiandae fuga voluptates ab quod cumque ad saepe, blanditiis officiis dolor unde porro magni, quasi nobis labore. Nobis.</p>
+            <p>An example Laravel App that demos the basic functionality of a typical e-commerce shopping cart.</p>
             <p>
                 <a href="http://andremadarang.com/implementing-a-shopping-cart-in-laravel/" class="btn btn-primary btn-lg" target="_blank">Blog Post</a>
                 <a href="https://github.com/drehimself/laravel-shopping-cart-example" class="btn btn-success btn-lg" target="_blank">GitHub Repo</a>

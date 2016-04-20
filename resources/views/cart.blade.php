@@ -14,6 +14,12 @@
             </div>
         @endif
 
+        @if (session()->has('error_message'))
+            <div class="alert alert-danger">
+                {{ session()->get('error_message') }}
+            </div>
+        @endif
+
         @if (sizeof(Cart::content()) > 0)
 
             <table class="table">
@@ -33,8 +39,16 @@
                     <tr>
                         <td class="table-image"><a href="{{ url('shop', [$item->product->slug]) }}"><img src="{{ asset('img/' . $item->product->image) }}" alt="product" class="img-responsive cart-image"></a></td>
                         <td><a href="{{ url('shop', [$item->product->slug]) }}">{{ $item->name }}</a></td>
-                        <td>{{ $item->qty }}</td>
-                        <td>${{ $item->price }}</td>
+                        <td>
+                            <select class="quantity" data-id="{{ $item->rowid }}">
+                                <option {{ $item->qty == 1 ? 'selected' : '' }}>1</option>
+                                <option {{ $item->qty == 2 ? 'selected' : '' }}>2</option>
+                                <option {{ $item->qty == 3 ? 'selected' : '' }}>3</option>
+                                <option {{ $item->qty == 4 ? 'selected' : '' }}>4</option>
+                                <option {{ $item->qty == 5 ? 'selected' : '' }}>5</option>
+                            </select>
+                        </td>
+                        <td>${{ $item->subtotal }}</td>
                         <td class=""></td>
                         <td>
                             <form action="{{ url('cart', [$item->rowid]) }}" method="POST">
@@ -58,7 +72,6 @@
                 </tbody>
             </table>
 
-
             <a href="/shop" class="btn btn-primary btn-lg">Continue Shopping</a> &nbsp;
             <a href="#" class="btn btn-success btn-lg">Proceed to Checkout</a>
 
@@ -81,4 +94,34 @@
 
     </div> <!-- end container -->
 
+@endsection
+
+@section('extra-js')
+    <script>
+        (function(){
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $('.quantity').on('change', function() {
+                var id = $(this).attr('data-id')
+                $.ajax({
+                  type: "PATCH",
+                  url: '/cart/' + id,
+                  data: {
+                    'quantity': this.value,
+                  },
+                  success: function(data) {
+                    window.location.href = '/cart';
+                  }
+                });
+
+            });
+
+        })();
+
+    </script>
 @endsection

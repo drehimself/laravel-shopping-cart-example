@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use \Cart as Cart;
+use Validator;
 
 class CartController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -27,6 +29,10 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
+        if (Cart::search(['id' => $request->id])) {
+            return redirect('cart')->withSuccessMessage('Item is already in your cart!');
+        }
+
         Cart::associate('Product','App')->add($request->id, $request->name, 1, $request->price);
         return redirect('cart')->withSuccessMessage('Item was added to your cart!');
     }
@@ -36,11 +42,24 @@ class CartController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        // Validation on max quantity
+        $validator = Validator::make($request->all(), [
+            'quantity' => 'required|numeric|between:1,5'
+        ]);
+
+         if ($validator->fails()) {
+            session()->flash('error_message', 'Quantity must be between 1 and 5.');
+            return response()->json(['success' => false]);
+         }
+
+        Cart::update($id, $request->quantity);
+        session()->flash('success_message', 'Quantity was updated successfully!');
+        return response()->json(['success' => true]);
+
     }
 
     /**
