@@ -37,6 +37,10 @@
         .table>tbody>tr>td {
             vertical-align: middle;
         }
+
+        .side-by-side {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -62,7 +66,8 @@
 
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="/cart">Cart ({{ Cart::count() }})</a></li>
+                <li><a href="/wishlist">Wishlist ({{ Cart::instance('wishlist')->count() }})</a></li>
+                <li><a href="/cart">Cart ({{ Cart::instance('main')->count() }})</a></li>
               </ul>
             </div><!--/.nav-collapse -->
           </div>

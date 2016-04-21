@@ -3,6 +3,19 @@
 @section('content')
 
     <div class="container">
+
+        @if (session()->has('success_message'))
+            <div class="alert alert-success">
+                {{ session()->get('success_message') }}
+            </div>
+        @endif
+
+        @if (session()->has('error_message'))
+            <div class="alert alert-danger">
+                {{ session()->get('error_message') }}
+            </div>
+        @endif
+
         <div class="jumbotron text-center clearfix">
             <h2>Laravel Shopping Cart Example</h2>
             <p>An example Laravel App that demos the basic functionality of a typical e-commerce shopping cart.</p>

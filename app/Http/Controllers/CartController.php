@@ -84,4 +84,25 @@ class CartController extends Controller
         Cart::destroy();
         return redirect('cart')->withSuccessMessage('Your cart his been cleared!');
     }
+
+    /**
+     * Switch item from shopping cart to wishlist.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function switchToWishlist($id)
+    {
+        $item = Cart::instance('main')->get($id);
+
+        Cart::instance('main')->remove($id);
+
+        if (Cart::instance('wishlist')->search(['id' => $item->id])) {
+            return redirect('cart')->withSuccessMessage('Item is already in your Wishlist!');
+        }
+
+        Cart::instance('wishlist')->associate('Product','App')->add($item->id, $item->name, 1, $item->price);
+        return redirect('cart')->withSuccessMessage('Item has been moved to your Wishlist!');
+
+    }
 }

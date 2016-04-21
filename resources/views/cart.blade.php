@@ -51,10 +51,15 @@
                         <td>${{ $item->subtotal }}</td>
                         <td class=""></td>
                         <td>
-                            <form action="{{ url('cart', [$item->rowid]) }}" method="POST">
+                            <form action="{{ url('cart', [$item->rowid]) }}" method="POST" class="side-by-side">
                                 {!! csrf_field() !!}
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="submit" class="btn btn-danger btn-sm" value="Remove">
+                            </form>
+
+                            <form action="{{ url('switchToWishlist', [$item->rowid]) }}" method="POST" class="side-by-side">
+                                {!! csrf_field() !!}
+                                <input type="submit" class="btn btn-success btn-sm" value="To Wishlist">
                             </form>
                         </td>
                     </tr>
