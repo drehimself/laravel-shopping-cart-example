@@ -100,5 +100,79 @@ class CartTest extends TestCase
              ->assertEquals(1, Cart::content()->first()->qty);
     }
 
+    /** @test */
+    public function it_adds_a_product_to_the_wishlist()
+    {
+        $this->visit('/shop/playstation-4')
+             ->press('Add to Wishlist')
+             ->seePageIs('/shop')
+             ->see('Item was added to your wishlist')
+             ->see('Wishlist (1)')
+             ->visit('/wishlist')
+             ->see('Playstation 4');
+    }
+
+    /** @test */
+    public function it_removes_a_product_from_the_wishlist()
+    {
+        $this->visit('/shop/playstation-4')
+             ->press('Add to Wishlist')
+             ->seePageIs('/shop')
+             ->see('Item was added to your wishlist')
+             ->see('Wishlist (1)')
+             ->visit('/wishlist')
+             ->see('Playstation 4')
+             ->press('Remove')
+             ->see('Item has been removed');
+    }
+
+    /** @test */
+    public function it_removes_all_products_from_the_wishlist()
+    {
+        $this->visit('/shop/playstation-4')
+             ->press('Add to Wishlist')
+             ->seePageIs('/shop')
+             ->see('Item was added to your wishlist')
+             ->visit('/shop/xbox-one')
+             ->press('Add to Wishlist')
+             ->seePageIs('/shop')
+             ->see('Item was added to your wishlist')
+             ->visit('/wishlist')
+             ->press('Empty Wishlist')
+             ->see('Your wishlist his been cleared')
+             ->see('Wishlist (0)');
+    }
+
+     /** @test */
+    public function it_moves_a_product_from_wishlist_to_cart()
+    {
+        $this->visit('/shop/playstation-4')
+             ->press('Add to Wishlist')
+             ->seePageIs('/shop')
+             ->see('Item was added to your wishlist')
+             ->visit('/wishlist')
+             ->press('To Cart')
+             ->see('Item has been moved to your shopping cart')
+             ->see('Wishlist (0)')
+             ->see('Cart (1)')
+             ->visit('/cart')
+             ->see('Playstation 4');
+    }
+
+     /** @test */
+    public function it_moves_a_product_from_cart_to_wishlist()
+    {
+        $this->visit('/shop/playstation-4')
+             ->press('Add to Cart')
+             ->seePageIs('/cart')
+             ->see('Item was added to your cart')
+             ->press('To Wishlist')
+             ->see('Item has been moved to your wishlist')
+             ->see('Wishlist (1)')
+             ->see('Cart (0)')
+             ->visit('/wishlist')
+             ->see('Playstation 4');
+    }
+
 
 }
