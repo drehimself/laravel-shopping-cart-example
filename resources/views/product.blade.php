@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="container">
-        <p><a href="/shop">Shop</a> / {{ $product->name }}</p>
+        <p><a href="{{ url('/shop') }}">Shop</a> / {{ $product->name }}</p>
         <h1>{{ $product->name }}</h1>
 
         <hr>
@@ -15,7 +15,7 @@
 
             <div class="col-md-8">
                 <h3>${{ $product->price }}</h3>
-                <form action="/cart" method="POST" class="side-by-side">
+                <form action="{{ url('/cart') }}" method="POST" class="side-by-side">
                     {!! csrf_field() !!}
                     <input type="hidden" name="id" value="{{ $product->id }}">
                     <input type="hidden" name="name" value="{{ $product->name }}">
@@ -23,7 +23,7 @@
                     <input type="submit" class="btn btn-success btn-lg" value="Add to Cart">
                 </form>
 
-                <form action="/wishlist" method="POST" class="side-by-side">
+                <form action="{{ url('/wishlist') }}" method="POST" class="side-by-side">
                     {!! csrf_field() !!}
                     <input type="hidden" name="id" value="{{ $product->id }}">
                     <input type="hidden" name="name" value="{{ $product->name }}">
