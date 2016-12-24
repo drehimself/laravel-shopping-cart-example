@@ -29,11 +29,15 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        if (Cart::search(['id' => $request->id])) {
+        $duplicates = Cart::search(function ($cartItem, $rowId) use ($request) {
+            return $cartItem->id === $request->id;
+        });
+
+        if (!$duplicates->isEmpty()) {
             return redirect('cart')->withSuccessMessage('Item is already in your cart!');
         }
 
-        Cart::associate('Product','App')->add($request->id, $request->name, 1, $request->price);
+        Cart::add($request->id, $request->name, 1, $request->price)->associate('App\Product');
         return redirect('cart')->withSuccessMessage('Item was added to your cart!');
     }
 
@@ -58,6 +62,7 @@ class CartController extends Controller
 
         Cart::update($id, $request->quantity);
         session()->flash('success_message', 'Quantity was updated successfully!');
+
         return response()->json(['success' => true]);
 
     }
@@ -82,7 +87,7 @@ class CartController extends Controller
     public function emptyCart()
     {
         Cart::destroy();
-        return redirect('cart')->withSuccessMessage('Your cart his been cleared!');
+        return redirect('cart')->withSuccessMessage('Your cart has been cleared!');
     }
 
     /**
@@ -93,15 +98,21 @@ class CartController extends Controller
      */
     public function switchToWishlist($id)
     {
-        $item = Cart::instance('main')->get($id);
+        $item = Cart::get($id);
 
-        Cart::instance('main')->remove($id);
+        Cart::remove($id);
 
-        if (Cart::instance('wishlist')->search(['id' => $item->id])) {
+        $duplicates = Cart::instance('wishlist')->search(function ($cartItem, $rowId) use ($id) {
+            return $cartItem->id === $id;
+        });
+
+        if (!$duplicates->isEmpty()) {
             return redirect('cart')->withSuccessMessage('Item is already in your Wishlist!');
         }
 
-        Cart::instance('wishlist')->associate('Product','App')->add($item->id, $item->name, 1, $item->price);
+        Cart::instance('wishlist')->add($item->id, $item->name, 1, $item->price)
+                                  ->associate('App\Product');
+
         return redirect('cart')->withSuccessMessage('Item has been moved to your Wishlist!');
 
     }

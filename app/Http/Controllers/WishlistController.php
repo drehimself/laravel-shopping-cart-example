@@ -29,11 +29,17 @@ class WishlistController extends Controller
      */
     public function store(Request $request)
     {
-        if (Cart::instance('wishlist')->search(['id' => $request->id])) {
+        $duplicates = Cart::instance('wishlist')->search(function ($cartItem, $rowId) use ($request) {
+            return $cartItem->id === $request->id;
+        });
+
+        if (!$duplicates->isEmpty()) {
             return redirect('shop')->withSuccessMessage('Item is already in your wishlist!');
         }
 
-        Cart::instance('wishlist')->associate('Product','App')->add($request->id, $request->name, 1, $request->price);
+        Cart::instance('wishlist')->add($request->id, $request->name, 1, $request->price)
+                                  ->associate('App\Product');
+
         return redirect('shop')->withSuccessMessage('Item was added to your wishlist!');
     }
 
@@ -69,7 +75,7 @@ class WishlistController extends Controller
     public function emptyWishlist()
     {
         Cart::instance('wishlist')->destroy();
-        return redirect('wishlist')->withSuccessMessage('Your wishlist his been cleared!');
+        return redirect('wishlist')->withSuccessMessage('Your wishlist has been cleared!');
     }
 
     /**
@@ -84,11 +90,17 @@ class WishlistController extends Controller
 
         Cart::instance('wishlist')->remove($id);
 
-        if (Cart::instance('main')->search(['id' => $item->id])) {
-            return redirect('wishlist')->withSuccessMessage('Item is already in your shopping cart!');
+        $duplicates = Cart::instance('default')->search(function ($cartItem, $rowId) use ($id) {
+            return $cartItem->id === $id;
+        });
+
+        if (!$duplicates->isEmpty()) {
+            return redirect('cart')->withSuccessMessage('Item is already in your shopping cart!');
         }
 
-        Cart::instance('main')->associate('Product','App')->add($item->id, $item->name, 1, $item->price);
+        Cart::instance('default')->add($item->id, $item->name, 1, $item->price)
+                                 ->associate('App\Product');
+
         return redirect('wishlist')->withSuccessMessage('Item has been moved to your shopping cart!');
 
     }

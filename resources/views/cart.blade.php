@@ -37,10 +37,10 @@
                 <tbody>
                     @foreach (Cart::content() as $item)
                     <tr>
-                        <td class="table-image"><a href="{{ url('shop', [$item->product->slug]) }}"><img src="{{ asset('img/' . $item->product->image) }}" alt="product" class="img-responsive cart-image"></a></td>
-                        <td><a href="{{ url('shop', [$item->product->slug]) }}">{{ $item->name }}</a></td>
+                        <td class="table-image"><a href="{{ url('shop', [$item->model->slug]) }}"><img src="{{ asset('img/' . $item->model->image) }}" alt="product" class="img-responsive cart-image"></a></td>
+                        <td><a href="{{ url('shop', [$item->model->slug]) }}">{{ $item->name }}</a></td>
                         <td>
-                            <select class="quantity" data-id="{{ $item->rowid }}">
+                            <select class="quantity" data-id="{{ $item->rowId }}">
                                 <option {{ $item->qty == 1 ? 'selected' : '' }}>1</option>
                                 <option {{ $item->qty == 2 ? 'selected' : '' }}>2</option>
                                 <option {{ $item->qty == 3 ? 'selected' : '' }}>3</option>
@@ -51,19 +51,36 @@
                         <td>${{ $item->subtotal }}</td>
                         <td class=""></td>
                         <td>
-                            <form action="{{ url('cart', [$item->rowid]) }}" method="POST" class="side-by-side">
+                            <form action="{{ url('cart', [$item->rowId]) }}" method="POST" class="side-by-side">
                                 {!! csrf_field() !!}
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="submit" class="btn btn-danger btn-sm" value="Remove">
                             </form>
 
-                            <form action="{{ url('switchToWishlist', [$item->rowid]) }}" method="POST" class="side-by-side">
+                            <form action="{{ url('switchToWishlist', [$item->rowId]) }}" method="POST" class="side-by-side">
                                 {!! csrf_field() !!}
                                 <input type="submit" class="btn btn-success btn-sm" value="To Wishlist">
                             </form>
                         </td>
                     </tr>
+
                     @endforeach
+                    <tr>
+                        <td class="table-image"></td>
+                        <td></td>
+                        <td class="small-caps table-bg" style="text-align: right">Subtotal</td>
+                        <td>${{ Cart::instance('default')->subtotal() }}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="table-image"></td>
+                        <td></td>
+                        <td class="small-caps table-bg" style="text-align: right">Tax</td>
+                        <td>${{ Cart::instance('default')->tax() }}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
 
                     <tr class="border-bottom">
                         <td class="table-image"></td>
