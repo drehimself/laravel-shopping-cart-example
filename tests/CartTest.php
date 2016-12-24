@@ -74,16 +74,16 @@ class CartTest extends TestCase
              ->seePageIs('/cart')
              ->see('Item was added to your cart')
              ->press('Empty Cart')
-             ->see('Your cart his been cleared')
+             ->see('Your cart has been cleared')
              ->see('Cart (0)');
     }
 
     /** @test */
     public function it_updates_the_quantity_of_a_product()
     {
-        Cart::associate('Product','App')->add(1, 'Playstation 4', 1, 399.99);
+        Cart::add(1, 'Playstation 4', 1, 399.99)->associate('App\Product');
 
-        $this->json('PATCH', '/cart/' . Cart::content()->first()->rowid, ['quantity' => 4])
+        $this->json('PATCH', '/cart/' . Cart::content()->first()->rowId, ['quantity' => 4])
              ->seeStatusCode(200)
              ->seeJson(['success' => true])
              ->assertEquals(4, Cart::content()->first()->qty);
@@ -92,9 +92,9 @@ class CartTest extends TestCase
     /** @test */
     public function it_does_not_update_the_quantity_of_a_product_if_not_between_1_and_5()
     {
-        Cart::associate('Product','App')->add(1, 'Playstation 4', 1, 399.99);
+        Cart::add(1, 'Playstation 4', 1, 399.99)->associate('App\Product');;
 
-        $this->json('PATCH', '/cart/' . Cart::content()->first()->rowid, ['quantity' => 6])
+        $this->json('PATCH', '/cart/' . Cart::content()->first()->rowId, ['quantity' => 6])
              ->seeStatusCode(200)
              ->seeJson(['success' => false])
              ->assertEquals(1, Cart::content()->first()->qty);
@@ -139,7 +139,7 @@ class CartTest extends TestCase
              ->see('Item was added to your wishlist')
              ->visit('/wishlist')
              ->press('Empty Wishlist')
-             ->see('Your wishlist his been cleared')
+             ->see('Your wishlist has been cleared')
              ->see('Wishlist (0)');
     }
 

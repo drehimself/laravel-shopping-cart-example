@@ -67,7 +67,7 @@
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <li class="{{ set_active('wishlist') }}"><a href="{{ url('/wishlist') }}">Wishlist ({{ Cart::instance('wishlist')->count(false) }})</a></li>
-                <li class="{{ set_active('cart') }}"><a href="{{ url('/cart') }}">Cart ({{ Cart::instance('main')->count(false) }})</a></li>
+                <li class="{{ set_active('cart') }}"><a href="{{ url('/cart') }}">Cart ({{ Cart::instance('default')->count(false) }})</a></li>
               </ul>
             </div><!--/.nav-collapse -->
           </div>
