@@ -94,11 +94,11 @@
                 </tbody>
             </table>
 
-            <a href="/shop" class="btn btn-primary btn-lg">Continue Shopping</a> &nbsp;
+            <a href="{{ url('/shop') }}" class="btn btn-primary btn-lg">Continue Shopping</a> &nbsp;
             <a href="#" class="btn btn-success btn-lg">Proceed to Checkout</a>
 
             <div style="float:right">
-                <form action="/emptyCart" method="POST">
+                <form action="{{ url('/emptyCart') }}" method="POST">
                     {!! csrf_field() !!}
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="submit" class="btn btn-danger btn-lg" value="Empty Cart">
@@ -108,7 +108,7 @@
         @else
 
             <h3>You have no items in your shopping cart</h3>
-            <a href="/shop" class="btn btn-primary btn-lg">Continue Shopping</a>
+            <a href="{{ url('/shop') }}" class="btn btn-primary btn-lg">Continue Shopping</a>
 
         @endif
 
@@ -132,12 +132,12 @@
                 var id = $(this).attr('data-id')
                 $.ajax({
                   type: "PATCH",
-                  url: '/cart/' + id,
+                  url: '{{ url("/cart") }}' + '/' + id,
                   data: {
                     'quantity': this.value,
                   },
                   success: function(data) {
-                    window.location.href = '/cart';
+                    window.location.href = '{{ url('/cart') }}';
                   }
                 });
 
