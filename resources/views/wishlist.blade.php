@@ -65,7 +65,7 @@
             <a href="/shop" class="btn btn-primary btn-lg">Continue Shopping</a> &nbsp;
 
             <div style="float:right">
-                <form action="/emptyWishlist" method="POST">
+                <form action="{{ url('/emptyWishlist') }}" method="POST">
                     {!! csrf_field() !!}
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="submit" class="btn btn-danger btn-lg" value="Empty Wishlist">
