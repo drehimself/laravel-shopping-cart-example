@@ -5,7 +5,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use \Cart as Cart;
 
-class CartTest extends TestCase
+class CartTest extends BrowserKitTestCase
 {
 
     /** @test */
